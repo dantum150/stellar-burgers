@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import ingredientsSlice from './slices/ingredients-slice';
 
 import {
   TypedUseSelectorHook,
@@ -6,7 +7,9 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 
-const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
+const rootReducer = () => ({
+  test: ingredientsSlice.reducer
+}); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
   reducer: rootReducer,
