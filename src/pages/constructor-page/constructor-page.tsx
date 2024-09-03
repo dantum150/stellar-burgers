@@ -11,18 +11,18 @@ import ingredientsSlice from '../../services/slices/ingredients-slice';
 export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
   const isIngredientsLoading = false;
-  const ingredientStore = useSelector((state) => state);
+  const ingredientStore = useSelector((state) => state.ingredients);
   const dispatch = useDispatch();
 
   // dispatch(action() || thunks())
-  console.log(ingredientStore);
+
   useEffect(() => {
     dispatch(getIngredients());
   }, []);
 
   return (
     <>
-      {isIngredientsLoading ? (
+      {ingredientStore.isLoading ? (
         <Preloader />
       ) : (
         <main className={styles.containerMain}>

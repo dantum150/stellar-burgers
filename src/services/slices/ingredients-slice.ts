@@ -5,7 +5,7 @@ import {
   Draft
 } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
-import { TIngredient } from '@utils-types';
+import { TIngredient, TConstructorIngredient } from '@utils-types';
 
 // 1. Санки
 // 2. Сам слайс
@@ -15,8 +15,15 @@ import { TIngredient } from '@utils-types';
 // 1.2 Арг2 - функция, которая содержит фетч. Всё, что функция вернёт - это всё попадёт в action.payload
 
 interface IState {
+  constructorItems: {
+    bun: TIngredient | null;
+    ingredients: TConstructorIngredient[];
+  };
   isLoading: boolean;
   isError: boolean;
+  buns: TIngredient[];
+  mains: TIngredient[];
+  sauces: TIngredient[];
   ingredients: TIngredient[];
 }
 
@@ -25,15 +32,39 @@ export const getIngredients = createAsyncThunk(
   async () => getIngredientsApi()
 );
 
+const initialState: IState = {
+  constructorItems: {
+    bun: null,
+    ingredients: []
+  },
+
+  isLoading: false,
+  isError: false,
+  buns: [],
+  mains: [],
+  sauces: [],
+  ingredients: []
+};
 // name - существительное, initialState, reducers
 const ingredientsSlice = createSlice({
   name: 'ingredients',
-  initialState: {
-    isLoading: false,
-    isError: false,
-    ingredients: []
+  initialState,
+  reducers: {
+    // 1. addIngredient
+    // 1.1 if кликаем по ингредиенту, который у нас тайпа "булка", то записываем в bun, else - записываем (пушим) в массив countuctorItems.ingredients
+    // в редусеры функция (state, action)
+    addIngredient(state, action: PayloadAction<TIngredient>) {
+      const ingredient = action.payload;
+      if (ingredient.type === 'bun') {
+        state.constructorItems.bun = ingredient;
+      } else {
+        state.constructorItems.ingredients.push({
+          ...ingredient,
+          id: ingredient._id
+        });
+      }
+    }
   },
-  reducers: {},
 
   // функция(builder)
   extraReducers: (builder) => {
@@ -46,11 +77,24 @@ const ingredientsSlice = createSlice({
     builder.addCase(
       getIngredients.fulfilled,
       (state: Draft<IState>, action: PayloadAction<TIngredient[]>) => {
+        // {type: 'bun'}
         // action = {type, payload}
-        (state.isLoading = false), (state.ingredients = action.payload);
+        state.ingredients = action.payload;
+        state.buns = action.payload.filter(
+          (ingredient) => ingredient.type === 'bun'
+        );
+        state.mains = action.payload.filter(
+          (ingredient) => ingredient.type === 'main'
+        );
+        state.sauces = action.payload.filter(
+          (ingredient) => ingredient.type === 'sauce'
+        );
+        state.isLoading = false;
       }
     );
   }
 });
+
+export const { addIngredient } = ingredientsSlice.actions;
 
 export default ingredientsSlice;
