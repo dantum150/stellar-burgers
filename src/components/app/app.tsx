@@ -11,7 +11,7 @@ import {
   ProfileOrders,
   NotFound404
 } from '@pages';
-import { AppHeader } from '@components';
+import { AppHeader, Modal, IngredientDetails } from '@components';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -54,6 +54,17 @@ const router = createBrowserRouter([
   {
     path: '*',
     element: <NotFound404 />
+  },
+  {
+    path: '/ingredients/:id',
+    element: (
+      <Modal
+        title='Детали элементов'
+        onClose={() => console.log('закрыта модалка')}
+      >
+        <IngredientDetails />
+      </Modal>
+    )
   }
 ]);
 

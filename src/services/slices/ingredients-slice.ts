@@ -19,6 +19,7 @@ interface IState {
     bun: TIngredient | null;
     ingredients: TConstructorIngredient[];
   };
+  ingredientData: TIngredient | null;
   isLoading: boolean;
   isError: boolean;
   buns: TIngredient[];
@@ -37,7 +38,7 @@ const initialState: IState = {
     bun: null,
     ingredients: []
   },
-
+  ingredientData: null,
   isLoading: false,
   isError: false,
   buns: [],
@@ -60,8 +61,26 @@ const ingredientsSlice = createSlice({
       } else {
         state.constructorItems.ingredients.push({
           ...ingredient,
-          id: ingredient._id
+          id: `${Date.now()}`
         });
+      }
+    },
+    // action.payload = 10
+    deleteIngredient(state, action: PayloadAction<string>) {
+      // if колбек возвращает true => элемент останется, else => удаляет
+      state.constructorItems.ingredients =
+        state.constructorItems.ingredients.filter(
+          (ingredient) => ingredient.id !== action.payload
+        );
+    },
+    //
+    findIndegredient(state, action: PayloadAction<string>) {
+      const foundIngredient = state.ingredients.find(
+        (ingredient) => ingredient._id === action.payload
+      ); // [{}]
+
+      if (foundIngredient) {
+        state.ingredientData = foundIngredient;
       }
     }
   },
@@ -95,6 +114,17 @@ const ingredientsSlice = createSlice({
   }
 });
 
-export const { addIngredient } = ingredientsSlice.actions;
+// все эти фукнции помещаем в dispatch
+export const { addIngredient, deleteIngredient, findIndegredient } =
+  ingredientsSlice.actions;
 
 export default ingredientsSlice;
+
+// 1. Сформировать особенный url в роутинг - www.localhost:4000/ingredients/234238dgikwddvksdv  path: '/:id'
+// 2. Внутри компонента самой страницы мы динамический параметр в переменную
+// 3. useEffect(() => {
+//    const ingredient = getIngrednientIfno('234238dgikwddvksdv')   // fetch('backend.com/users') {name, calories, bun, mains}
+//  },[])
+
+// 4. <h1>{ingredient.name}</h1>
+// 5. <p>{ingredient.calories}</p>
