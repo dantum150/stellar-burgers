@@ -6,10 +6,12 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook
 } from 'react-redux';
+import usersSlice from './slices/users-slice';
 
 const rootReducer = () => ({
   ingredients: ingredientsSlice.reducer,
-  feed: feedsSlice.reducer
+  feed: feedsSlice.reducer,
+  users: usersSlice.reducer
 }); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({

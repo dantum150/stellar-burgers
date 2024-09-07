@@ -12,7 +12,14 @@ import {
   NotFound404
 } from '@pages';
 import { AppHeader, Modal, IngredientDetails } from '@components';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  BrowserRouter,
+  Routes,
+  Route
+} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
@@ -58,10 +65,7 @@ const router = createBrowserRouter([
   {
     path: '/ingredients/:id',
     element: (
-      <Modal
-        title='Детали элементов'
-        onClose={() => console.log('закрыта модалка')}
-      >
+      <Modal title='Детали элементов' onClose={() => console.log()}>
         <IngredientDetails />
       </Modal>
     )
@@ -73,7 +77,25 @@ const router = createBrowserRouter([
 const App = () => (
   <div className={styles.app}>
     <AppHeader />
-    <RouterProvider router={router} />
+    {/* <RouterProvider router={router} /> */}
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<ConstructorPage />} />
+
+        <Route
+          path='/ingredients/:id'
+          element={
+            <Modal title='Детали элементов' onClose={() => console.log(123)}>
+              <IngredientDetails />
+            </Modal>
+          }
+        />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
+      </Routes>
+    </BrowserRouter>
   </div>
 );
 
