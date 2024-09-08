@@ -22,42 +22,38 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <ConstructorPage />
-  },
+  // {
+  //   path: '/',
+  //   element: <ConstructorPage />
+  // },
   {
     path: '/feed',
     element: <Feed />
   },
-  {
-    path: '/login',
-    element: <Login />
-  },
-  {
-    path: '/register',
-    element: <Register />
-  },
-  {
-    path: '/forgot-password',
-    element: <ForgotPassword />
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPassword />
-  },
-  {
-    path: '/profile',
-    element: <Profile />
-  },
-  {
-    path: '/register',
-    element: <Register />
-  },
-  {
-    path: '/profile/orders',
-    element: <ProfileOrders />
-  },
+  // {
+  //   path: '/login',
+  //   element: <Login />
+  // },
+  // {
+  //   path: '/register',
+  //   element: <Register />
+  // },
+  // {
+  //   path: '/forgot-password',
+  //   element: <ForgotPassword />
+  // },
+  // {
+  //   path: '/reset-password',
+  //   element: <ResetPassword />
+  // },
+  // {
+  //   path: '/profile',
+  //   element: <Profile />
+  // },
+  // {
+  //   path: '/profile/orders',
+  //   element: <ProfileOrders />
+  // },
   {
     path: '*',
     element: <NotFound404 />
@@ -78,24 +74,24 @@ const App = () => (
   <div className={styles.app}>
     <AppHeader />
     {/* <RouterProvider router={router} /> */}
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<ConstructorPage />} />
+    <Routes>
+      <Route path='/' element={<ConstructorPage />} />
 
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal title='Детали элементов' onClose={() => console.log(123)}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-      </Routes>
-    </BrowserRouter>
+      <Route
+        path='/ingredients/:id'
+        element={
+          <Modal title='Детали элементов' onClose={() => console.log(123)}>
+            <IngredientDetails />
+          </Modal>
+        }
+      />
+      <Route path='/login' element={<Login />} />
+      <Route path='/register' element={<Register />} />
+      <Route path='/forgot-password' element={<ForgotPassword />} />
+      <Route path='/reset-password' element={<ResetPassword />} />
+      <Route path='/profile' element={<Profile />} />
+      <Route path='/profile/orders' element={<ProfileOrders />} />
+    </Routes>
   </div>
 );
 

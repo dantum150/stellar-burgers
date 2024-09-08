@@ -2,14 +2,16 @@ import {
   createAsyncThunk,
   createSlice,
   PayloadAction,
-  Draft //для типизация стейтов
+  Draft, //для типизация стейтов
+  isAction
 } from '@reduxjs/toolkit';
-import { getFeedsApi } from '@api';
+import { getFeedsApi, getOrdersApi, orderBurgerApi } from '@api';
 import { TOrder, TOrdersData } from '@utils-types'; //?
 
 interface IState {
   isLoading: boolean;
   isError: boolean;
+  userOrders: TOrder[];
   orders: TOrder[];
 }
 //1. Идет фетч запрос через функцию
@@ -18,11 +20,21 @@ interface IState {
 const initialState: IState = {
   isLoading: false,
   isError: false,
+  userOrders: [],
   orders: [] // never [] - всегда пустой
 };
 
 export const getFeeds = createAsyncThunk('feed/getFeedsApi', async () =>
   getFeedsApi()
+);
+
+export const getOrders = createAsyncThunk('feed/getOrders', async () =>
+  getOrdersApi()
+);
+
+export const createOrder = createAsyncThunk(
+  'feed/createOrder',
+  async (ids: string[]) => orderBurgerApi(ids)
 );
 
 const feedsSlice = createSlice({
@@ -39,6 +51,14 @@ const feedsSlice = createSlice({
         state.orders = action.payload.orders;
       }
     );
+    builder.addCase(getOrders.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getOrders.fulfilled, (state, action) => {
+      //@ts-ignore
+      state.userOrders = action.payload.orders; // {success, orders, total, totalDay}
+      state.isLoading = false;
+    });
   }
 });
 

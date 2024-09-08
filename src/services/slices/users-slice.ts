@@ -1,13 +1,18 @@
-import { registerUserApi, TLoginData } from '@api';
 import {
   createAsyncThunk,
   createSlice,
   PayloadAction,
   Draft //для типизация стейтов
 } from '@reduxjs/toolkit';
-import { TRegisterData, loginUserApi } from '@api';
+import {
+  TRegisterData,
+  loginUserApi,
+  updateUserApi,
+  forgotPasswordApi,
+  registerUserApi,
+  TLoginData
+} from '@api';
 import { setCookie } from '../../utils/cookie';
-import { forgotPasswordApi } from '@api';
 
 export const registerUser = createAsyncThunk(
   'users/registerUser',
@@ -30,6 +35,11 @@ export const loginUser = createAsyncThunk(
 export const forgotPassword = createAsyncThunk(
   'users/forgotPassword',
   async (userInfo: { email: string }) => forgotPasswordApi(userInfo)
+);
+
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async (userInfo: TRegisterData) => updateUserApi(userInfo)
 );
 
 const initialState = {
@@ -70,6 +80,13 @@ const usersSlice = createSlice({
       state.user = action.payload.user;
       state.isLoading = false;
     });
+    builder.addCase(updateUser.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.isLoading = false;
+    }); // action.payload = {success: true, user: {email: 'musorka', name: 'Даниил Рамм'}}
   }
 });
 

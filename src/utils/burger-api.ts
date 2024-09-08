@@ -104,7 +104,9 @@ type TNewOrderResponse = TServerResponse<{
   name: string;
 }>;
 
-export const orderBurgerApi = (data: string[]) =>
+export const orderBurgerApi = (
+  data: string[] // булка id=1, мясло id=2  ingredient = {id}  [1,2]         // при создании бургера - 50 айдишников этих ингредиентов
+) =>
   fetchWithRefresh<TNewOrderResponse>(`${URL}/orders`, {
     method: 'POST',
     headers: {
