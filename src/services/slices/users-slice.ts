@@ -13,6 +13,7 @@ import {
   TLoginData
 } from '@api';
 import { setCookie } from '../../utils/cookie';
+import { getUserApi } from '@api';
 
 export const registerUser = createAsyncThunk(
   'users/registerUser',
@@ -40,6 +41,10 @@ export const forgotPassword = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   'users/updateUser',
   async (userInfo: TRegisterData) => updateUserApi(userInfo)
+);
+
+export const getUserInfo = createAsyncThunk('user/getUserInfo', async () =>
+  getUserApi()
 );
 
 const initialState = {
@@ -87,6 +92,13 @@ const usersSlice = createSlice({
       state.user = action.payload.user;
       state.isLoading = false;
     }); // action.payload = {success: true, user: {email: 'musorka', name: 'Даниил Рамм'}}
+    builder.addCase(getUserInfo.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getUserInfo.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.isLoading = false;
+    });
   }
 });
 

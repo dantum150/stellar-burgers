@@ -208,8 +208,11 @@ export const resetPasswordApi = (data: { password: string; token: string }) =>
 
 type TUserResponse = TServerResponse<{ user: TUser }>;
 
+// Сейчас получаем инфу о нас при логине => в хедер попадает инфа о нас
+// В максимально корневом компоненте единожды будет происходить запрос на получение инфы о нас
 export const getUserApi = () =>
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
+    // {user: {email, name}}
     headers: {
       authorization: getCookie('accessToken')
     } as HeadersInit

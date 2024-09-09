@@ -20,40 +20,11 @@ import {
   Route
 } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import { useDispatch } from '../../services/store';
+import { getUserInfo } from '../../services/slices/users-slice';
+import { OrderInfo } from '@components';
 const router = createBrowserRouter([
-  // {
-  //   path: '/',
-  //   element: <ConstructorPage />
-  // },
-  {
-    path: '/feed',
-    element: <Feed />
-  },
-  // {
-  //   path: '/login',
-  //   element: <Login />
-  // },
-  // {
-  //   path: '/register',
-  //   element: <Register />
-  // },
-  // {
-  //   path: '/forgot-password',
-  //   element: <ForgotPassword />
-  // },
-  // {
-  //   path: '/reset-password',
-  //   element: <ResetPassword />
-  // },
-  // {
-  //   path: '/profile',
-  //   element: <Profile />
-  // },
-  // {
-  //   path: '/profile/orders',
-  //   element: <ProfileOrders />
-  // },
   {
     path: '*',
     element: <NotFound404 />
@@ -70,29 +41,48 @@ const router = createBrowserRouter([
 
 // {path: '/', element: }
 
-const App = () => (
-  <div className={styles.app}>
-    <AppHeader />
-    {/* <RouterProvider router={router} /> */}
-    <Routes>
-      <Route path='/' element={<ConstructorPage />} />
+const App = () => {
+  const dispatch = useDispatch();
+  //getUserInfo
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
 
-      <Route
-        path='/ingredients/:id'
-        element={
-          <Modal title='Детали элементов' onClose={() => console.log(123)}>
-            <IngredientDetails />
-          </Modal>
-        }
-      />
-      <Route path='/login' element={<Login />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/forgot-password' element={<ForgotPassword />} />
-      <Route path='/reset-password' element={<ResetPassword />} />
-      <Route path='/profile' element={<Profile />} />
-      <Route path='/profile/orders' element={<ProfileOrders />} />
-    </Routes>
-  </div>
-);
+  return (
+    <div className={styles.app}>
+      <AppHeader />
+      {/* <RouterProvider router={router} /> */}
+      <Routes>
+        <Route path='/' element={<ConstructorPage />} />
+
+        <Route
+          path='/ingredients/:id'
+          element={
+            <Modal title='Детали элементов' onClose={() => console.log(123)}>
+              <IngredientDetails />
+            </Modal>
+          }
+        />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile/orders' element={<ProfileOrders />} />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <Modal title='Детали заказа' onClose={() => console.log(123)}>
+              <OrderInfo />
+            </Modal>
+          }
+        />
+      </Routes>
+    </div>
+  );
+};
+// 1. useDispatch с помощью которого запускаем санку
+// 2. Сделаем санку в слайсе
+// 3. pending/fulfiled/rejected
 
 export default App;
