@@ -15,24 +15,45 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
       <div className={styles.menu_part_left}>
         <>
           <BurgerIcon type={'primary'} />
-          <p className='text text_type_main-default ml-2 mr-10'>Конструктор</p>
+          <NavLink
+            to='/'
+            className={({ isActive, isPending }) =>
+              isPending ? 'pending' : isActive ? styles.link_active : ''
+            }
+          >
+            <p className='text text_type_main-default ml-2 mr-10'>
+              Конструктор
+            </p>
+          </NavLink>
         </>
         <>
           <ListIcon type={'primary'} />
-          <p className='text text_type_main-default ml-2'>Лента заказов</p>
+          <NavLink
+            to='/feed'
+            className={({ isActive, isPending }) =>
+              isPending ? 'pending' : isActive ? styles.link_active : ''
+            }
+          >
+            <p className='text text_type_main-default ml-2'>Лента заказов</p>
+          </NavLink>
         </>
       </div>
       <div className={styles.logo}>
         <Logo className='' />
       </div>
-      <NavLink to='/profile'>
-        <div className={styles.link_position_last}>
-          <ProfileIcon type={'primary'} />
+      <div className={styles.link_position_last}>
+        <ProfileIcon type={'primary'} />
+        <NavLink
+          to='/profile'
+          className={({ isActive, isPending }) =>
+            isPending ? 'pending' : isActive ? styles.link_active : ''
+          }
+        >
           <p className='text text_type_main-default ml-2'>
             {userName || 'Личный кабинет'}
           </p>
-        </div>
-      </NavLink>
+        </NavLink>
+      </div>
     </nav>
   </header>
 );

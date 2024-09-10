@@ -47,6 +47,14 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () =>
   getUserApi()
 );
 
+// if(state.isAuthChecked) {
+//   return <Основная страница./>
+// } else {
+//   return <Navigate to='/login'/>
+// }
+
+// getUserinfo - если она нормально отработала - показатель того, что все токены на месте, вывод - мы авторизованы
+
 const initialState = {
   isAuthChecked: false,
   isLoading: false,
@@ -84,6 +92,7 @@ const usersSlice = createSlice({
       saveTokens(action.payload.accessToken, action.payload.refreshToken);
       state.user = action.payload.user;
       state.isLoading = false;
+      state.isAuthChecked = true;
     });
     builder.addCase(updateUser.pending, (state) => {
       state.isLoading = true;
@@ -98,6 +107,7 @@ const usersSlice = createSlice({
     builder.addCase(getUserInfo.fulfilled, (state, action) => {
       state.user = action.payload.user;
       state.isLoading = false;
+      state.isAuthChecked = true;
     });
   }
 });

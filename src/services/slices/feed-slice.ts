@@ -9,12 +9,15 @@ import { getFeedsApi, getOrdersApi, orderBurgerApi } from '@api';
 import { TOrder, TOrdersData } from '@utils-types'; //?
 import { getOrderByNumberApi } from '@api';
 
+// total, totalToday
 interface IState {
   isLoading: boolean;
   isError: boolean;
   userOrders: TOrder[];
   orders: TOrder[];
   orderData: TOrder | null;
+  total: number;
+  totalToday: number;
 }
 //1. Идет фетч запрос через функцию
 //2. Работаем с слайсом
@@ -24,7 +27,9 @@ const initialState: IState = {
   isError: false,
   userOrders: [],
   orderData: null,
-  orders: [] // never [] - всегда пустой
+  orders: [], // never [] - всегда пустой
+  total: 0,
+  totalToday: 0
 };
 
 export const getFeeds = createAsyncThunk('feed/getFeedsApi', async () =>
@@ -57,6 +62,8 @@ const feedsSlice = createSlice({
       getFeeds.fulfilled,
       (state: Draft<IState>, action: PayloadAction<TOrdersData>) => {
         state.orders = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
       }
     );
     builder.addCase(getOrders.pending, (state) => {
