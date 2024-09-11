@@ -20,7 +20,7 @@ import {
   Route,
   Navigate
 } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
 import { getUserInfo } from '../../services/slices/users-slice';
@@ -45,9 +45,33 @@ function ProtectedRoute(props: IProps) {
   }
 }
 
-<ProtectedRoute>
-  <Profile />
-</ProtectedRoute>;
+function IngredientRoute(props: { onClose: () => void }) {
+  const location = useLocation(); // {hash, path, state}
+
+  if (location.state) {
+    return (
+      <Modal title='Детали ингредиента' onClose={props.onClose}>
+        <IngredientDetails />
+      </Modal>
+    );
+  } else {
+    return <IngredientDetails />;
+  }
+}
+
+function OrderRoute(props: { onClose: () => void }) {
+  const location = useLocation();
+
+  if (location.state) {
+    return (
+      <Modal title='Детали заказа' onClose={props.onClose}>
+        <OrderInfo />
+      </Modal>
+    );
+  } else {
+    return <OrderInfo />;
+  }
+}
 
 const router = createBrowserRouter([
   {
@@ -88,11 +112,7 @@ const App = () => {
 
         <Route
           path='/ingredients/:id'
-          element={
-            <Modal title='Детали элементов' onClose={closeModal}>
-              <IngredientDetails />
-            </Modal>
-          }
+          element={<IngredientRoute onClose={closeModal} />}
         />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
@@ -118,20 +138,12 @@ const App = () => {
 
         <Route
           path='/profile/orders/:number' // feed/:number
-          element={
-            <Modal title='Детали заказа' onClose={closeModal}>
-              <OrderInfo />
-            </Modal>
-          }
+          element={<OrderRoute onClose={closeModal} />}
         />
 
         <Route
           path='/feed/:number' // feed/:number
-          element={
-            <Modal title='Детали заказа' onClose={closeModal}>
-              <OrderInfo />
-            </Modal>
-          }
+          element={<OrderRoute onClose={closeModal} />}
         />
       </Routes>
     </div>

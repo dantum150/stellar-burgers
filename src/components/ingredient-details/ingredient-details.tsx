@@ -5,22 +5,32 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { useSelector } from '../../services/store';
-import { findIndegredient } from '../../services/slices/ingredients-slice';
+import {
+  findIndegredient,
+  getIngredients
+} from '../../services/slices/ingredients-slice';
+import { useLocation } from 'react-router-dom';
 export const IngredientDetails: FC = () => {
   // vk.com/dantum
   const params = useParams(); // () => {nickname: 'dantum'}
   /** TODO: взять переменную из стора */
   const store = useSelector((state) => state.ingredients);
 
+  const location = useLocation();
   // findIndegredient
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  async function getIngredient() {
     const id = params.id;
+    await dispatch(getIngredients());
 
     if (id) {
       dispatch(findIndegredient(id));
     }
+  }
+
+  useEffect(() => {
+    getIngredient();
   }, []);
 
   // useEffect(() => {
