@@ -5,7 +5,7 @@ import { TIngredient } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { getOrderInfo } from '../../services/slices/feed-slice';
-
+import { getIngredients } from '../../services/slices/ingredients-slice';
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
 
@@ -71,10 +71,15 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
+  async function getOrder(orderNumber: number) {
+    await dispatch(getIngredients());
+    await dispatch(getOrderInfo(orderNumber));
+  }
+
   // getOrderInfo
   useEffect(() => {
     //@ts-ignore
-    dispatch(getOrderInfo(params.number));
+    getOrder(params.number);
   }, []);
 
   if (!orderInfo) {

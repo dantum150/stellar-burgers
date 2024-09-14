@@ -51,9 +51,13 @@ function IngredientRoute(props: { onClose: () => void }) {
 
   if (location.state) {
     return (
-      <Modal title='Детали ингредиента' onClose={props.onClose}>
-        <IngredientDetails />
-      </Modal>
+      <>
+        <Modal title='Детали ингредиента' onClose={props.onClose}>
+          <IngredientDetails />
+        </Modal>
+
+        <ConstructorPage />
+      </>
     );
   } else {
     return <IngredientDetails />;
@@ -65,9 +69,31 @@ function OrderRoute(props: { onClose: () => void }) {
 
   if (location.state) {
     return (
-      <Modal title='Детали заказа' onClose={props.onClose}>
-        <OrderInfo />
-      </Modal>
+      <>
+        <Modal title='Детали заказа' onClose={props.onClose}>
+          <OrderInfo />
+        </Modal>
+
+        <ProfileOrders />
+      </>
+    );
+  } else {
+    return <OrderInfo />;
+  }
+}
+
+function FeedRoute(props: { onClose: () => void }) {
+  const location = useLocation();
+
+  if (location.state) {
+    return (
+      <>
+        <Modal title='Детали заказа' onClose={props.onClose}>
+          <OrderInfo />
+        </Modal>
+
+        <Feed />
+      </>
     );
   } else {
     return <OrderInfo />;
@@ -144,7 +170,7 @@ const App = () => {
 
         <Route
           path='/feed/:number' // feed/:number
-          element={<OrderRoute onClose={closeModal} />}
+          element={<FeedRoute onClose={closeModal} />}
         />
       </Routes>
     </div>
