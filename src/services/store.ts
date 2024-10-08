@@ -8,7 +8,7 @@ import {
 } from 'react-redux';
 import usersSlice from './slices/users-slice';
 
-const rootReducer = () => ({
+export const rootReducer = () => ({
   ingredients: ingredientsSlice.reducer,
   feed: feedsSlice.reducer,
   users: usersSlice.reducer

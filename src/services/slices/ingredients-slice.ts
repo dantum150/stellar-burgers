@@ -111,6 +111,10 @@ const ingredientsSlice = createSlice({
         state.isLoading = false;
       }
     );
+
+    builder.addCase(getIngredients.rejected, (state) => {
+      state.isError = true;
+    });
   }
 });
 

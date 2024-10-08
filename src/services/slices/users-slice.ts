@@ -58,6 +58,7 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () =>
 const initialState = {
   isAuthChecked: false,
   isLoading: false,
+  isError: false,
   error: '',
   user: {
     name: '',
@@ -108,6 +109,10 @@ const usersSlice = createSlice({
       state.user = action.payload.user;
       state.isLoading = false;
       state.isAuthChecked = true;
+    });
+    builder.addCase(getUserInfo.rejected, (state) => {
+      state.isError = true;
+      state.isLoading = false;
     });
   }
 });

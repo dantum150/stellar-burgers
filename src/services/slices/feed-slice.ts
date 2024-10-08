@@ -14,6 +14,7 @@ interface IState {
   isLoading: boolean;
   isError: boolean;
   userOrders: TOrder[];
+  orderRequest: boolean;
   orders: TOrder[];
   orderData: TOrder | null;
   total: number;
@@ -25,6 +26,7 @@ interface IState {
 const initialState: IState = {
   isLoading: false,
   isError: false,
+  orderRequest: false,
   userOrders: [],
   orderData: null,
   orders: [], // never [] - всегда пустой
@@ -53,7 +55,11 @@ export const getOrderInfo = createAsyncThunk(
 const feedsSlice = createSlice({
   name: 'feed',
   initialState: initialState,
-  reducers: {}, // синхронная функция
+  reducers: {
+    closeModal(state) {
+      state.orderData = null;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getFeeds.pending, (state) => {
       state.isLoading = true;
@@ -74,6 +80,9 @@ const feedsSlice = createSlice({
       state.userOrders = action.payload; // {success, orders, total, totalDay}
       state.isLoading = false;
     });
+    builder.addCase(getOrders.rejected, (state) => {
+      state.isError = true;
+    });
     builder.addCase(getOrderInfo.pending, (state) => {
       state.isLoading = true;
     });
@@ -82,7 +91,16 @@ const feedsSlice = createSlice({
       state.orderData = action.payload.orders[0];
       state.isLoading = false;
     });
+    builder.addCase(createOrder.pending, (state) => {
+      state.orderRequest = true;
+    });
+
+    builder.addCase(createOrder.fulfilled, (state, action) => {
+      state.orderRequest = false;
+      state.orderData = action.payload.order;
+    });
   }
 });
 
+export const { closeModal } = feedsSlice.actions;
 export default feedsSlice;
