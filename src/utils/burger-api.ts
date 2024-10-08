@@ -72,11 +72,11 @@ type TOrdersResponse = TServerResponse<{
 }>;
 
 export const getIngredientsApi = () =>
-  fetch(`${URL}/ingredients`)
+  fetch(`${URL}/ingredients`) // {ok, status, statusText}
     .then((res) => checkResponse<TIngredientsResponse>(res))
     .then((data) => {
-      if (data?.success) return data.data;
-      return Promise.reject(data);
+      if (data?.success) return data.data; //{ [...ingredients]}
+      return Promise.reject(data); // error
     });
 
 export const getFeedsApi = () =>
@@ -104,7 +104,9 @@ type TNewOrderResponse = TServerResponse<{
   name: string;
 }>;
 
-export const orderBurgerApi = (data: string[]) =>
+export const orderBurgerApi = (
+  data: string[] // булка id=1, мясло id=2  ingredient = {id}  [1,2]         // при создании бургера - 50 айдишников этих ингредиентов
+) =>
   fetchWithRefresh<TNewOrderResponse>(`${URL}/orders`, {
     method: 'POST',
     headers: {
@@ -206,8 +208,11 @@ export const resetPasswordApi = (data: { password: string; token: string }) =>
 
 type TUserResponse = TServerResponse<{ user: TUser }>;
 
+// Сейчас получаем инфу о нас при логине => в хедер попадает инфа о нас
+// В максимально корневом компоненте единожды будет происходить запрос на получение инфы о нас
 export const getUserApi = () =>
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
+    // {user: {email, name}}
     headers: {
       authorization: getCookie('accessToken')
     } as HeadersInit
