@@ -58,6 +58,10 @@ const feedsSlice = createSlice({
   reducers: {
     closeModal(state) {
       state.orderData = null;
+    },
+    resetOrderInfo(state) {
+      state.orderRequest = false;
+      state.orderData = null;
     }
   },
   extraReducers: (builder) => {
@@ -102,5 +106,5 @@ const feedsSlice = createSlice({
   }
 });
 
-export const { closeModal } = feedsSlice.actions;
+export const { closeModal, resetOrderInfo } = feedsSlice.actions;
 export default feedsSlice;

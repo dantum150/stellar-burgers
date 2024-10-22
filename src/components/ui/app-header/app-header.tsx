@@ -18,7 +18,11 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
           <NavLink
             to='/'
             className={({ isActive, isPending }) =>
-              isPending ? 'pending' : isActive ? styles.link_active : ''
+              isPending
+                ? 'pending'
+                : isActive
+                  ? `${styles.link_active} ${styles.link}`
+                  : styles.link
             }
           >
             <p className='text text_type_main-default ml-2 mr-10'>
@@ -31,7 +35,11 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
           <NavLink
             to='/feed'
             className={({ isActive, isPending }) =>
-              isPending ? 'pending' : isActive ? styles.link_active : ''
+              isPending
+                ? 'pending'
+                : isActive
+                  ? `${styles.link_active} ${styles.link}`
+                  : styles.link
             }
           >
             <p className='text text_type_main-default ml-2'>Лента заказов</p>
@@ -46,7 +54,11 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         <NavLink
           to='/profile'
           className={({ isActive, isPending }) =>
-            isPending ? 'pending' : isActive ? styles.link_active : ''
+            isPending
+              ? 'pending'
+              : isActive
+                ? `${styles.link_active} ${styles.link}`
+                : styles.link
           }
         >
           <p className='text text_type_main-default ml-2'>

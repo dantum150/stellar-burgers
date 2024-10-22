@@ -4,7 +4,7 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
-import { getOrderInfo } from '../../services/slices/feed-slice';
+import { getOrderInfo, resetOrderInfo } from '../../services/slices/feed-slice';
 import { getIngredients } from '../../services/slices/ingredients-slice';
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */
@@ -21,6 +21,7 @@ export const OrderInfo: FC = () => {
   // 4. fulfiled => записываем всю инфу о заказе в слайсе в поле orderData
 
   const params = useParams(); // {number: 4654234} || null, undefined
+  const number = Number(params?.number);
   const orderSlice = useSelector((state) => state.feed);
   const ingredientsSlice = useSelector((state) => state.ingredients);
 
@@ -65,12 +66,12 @@ export const OrderInfo: FC = () => {
 
     return {
       ...orderData,
+      number,
       ingredientsInfo,
       date,
       total
     };
   }, [orderData, ingredients]);
-
   async function getOrder(orderNumber: number) {
     await dispatch(getIngredients());
     await dispatch(getOrderInfo(orderNumber));
@@ -80,11 +81,14 @@ export const OrderInfo: FC = () => {
   useEffect(() => {
     //@ts-ignore
     getOrder(params.number);
+
+    return () => {
+      dispatch(resetOrderInfo());
+    };
   }, []);
 
   if (!orderInfo) {
     return <Preloader />;
   }
-
   return <OrderInfoUI orderInfo={orderInfo} />;
 };

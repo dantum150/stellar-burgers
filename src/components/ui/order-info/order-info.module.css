@@ -3,6 +3,9 @@
   width: 640px;
 }
 .number {
+  font-family: 'Iceland';
+  font-size: 28px;
+  font-weight: 400;
   text-align: center;
 }
 

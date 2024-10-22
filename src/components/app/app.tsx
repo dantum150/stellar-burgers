@@ -18,7 +18,8 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate
+  Navigate,
+  useParams
 } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -70,7 +71,7 @@ function OrderRoute(props: { onClose: () => void }) {
   if (location.state) {
     return (
       <>
-        <Modal title='Детали заказа' onClose={props.onClose}>
+        <Modal title='' onClose={props.onClose}>
           <OrderInfo />
         </Modal>
 
@@ -88,7 +89,7 @@ function FeedRoute(props: { onClose: () => void }) {
   if (location.state) {
     return (
       <>
-        <Modal title='Детали заказа' onClose={props.onClose}>
+        <Modal title='' onClose={props.onClose}>
           <OrderInfo />
         </Modal>
 

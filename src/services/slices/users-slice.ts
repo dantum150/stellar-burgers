@@ -12,7 +12,7 @@ import {
   registerUserApi,
   TLoginData
 } from '@api';
-import { setCookie } from '../../utils/cookie';
+import { deleteCookie, setCookie } from '../../utils/cookie';
 import { getUserApi } from '@api';
 
 export const registerUser = createAsyncThunk(
@@ -54,8 +54,18 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async () =>
 // }
 
 // getUserinfo - если она нормально отработала - показатель того, что все токены на месте, вывод - мы авторизованы
-
-const initialState = {
+interface IUser {
+  name: string;
+  email: string;
+}
+interface IInitialState {
+  isAuthChecked: boolean;
+  isLoading: boolean;
+  isError: boolean;
+  error: string;
+  user: IUser | null;
+}
+const initialState: IInitialState = {
   isAuthChecked: false,
   isLoading: false,
   isError: false,
@@ -70,7 +80,14 @@ const usersSlice = createSlice({
   name: 'users',
   initialState: initialState,
   // объект из "синхронных" функций
-  reducers: {},
+  reducers: {
+    logoutUser(state) {
+      state.isAuthChecked = false;
+      state.user = null;
+      localStorage.removeItem('refreshToken');
+      deleteCookie('accessToken');
+    }
+  },
   // функция с параметром builder
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {
@@ -117,4 +134,5 @@ const usersSlice = createSlice({
   }
 });
 
+export const { logoutUser } = usersSlice.actions;
 export default usersSlice;
