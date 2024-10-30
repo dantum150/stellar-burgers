@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "name": "qweqweqw",
+  "order": {
+    "createdAt": "2024-09-30T07:28:22.671Z",
+    "ingredients": [],
+    "name": "Краторный био-марсианский бургер",
+    "number": 54657,
+    "owner": {
+      "createdAt": "2024-09-07T06:19:00.386Z",
+      "email": "musorkadantuma@gmail.com",
+      "name": "Даниил Рамм",
+      "updatedAt": "2024-09-08T05:58:10.636Z"
+    },
+    "price": 1679,
+    "status": "done",
+    "updatedAt": "2024-09-30T07:28:23.458Z",
+    "_id": "66fa5316119d45001b50a6fb"
+  }
+}

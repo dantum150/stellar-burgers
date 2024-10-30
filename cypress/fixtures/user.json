@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "accessToken": "asdasdasdasdasd",
+  "user": {
+    "email": "example@mail.ru",
+    "name": "example"
+  }
+}
