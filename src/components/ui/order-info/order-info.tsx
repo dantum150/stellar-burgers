@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useEffect } from 'react';
 import {
   CurrencyIcon,
   FormattedDate
@@ -8,9 +8,12 @@ import styles from './order-info.module.css';
 
 import { OrderInfoUIProps } from './type';
 import { OrderStatus } from '@components';
+import { useDispatch } from '../../../services/store';
+import { resetOrderInfo } from '../../../services/slices/feed-slice';
 
 export const OrderInfoUI: FC<OrderInfoUIProps> = memo(({ orderInfo }) => (
   <div className={styles.wrap}>
+    <p className={styles.number}>#{orderInfo.number}</p>
     <h3 className={`text text_type_main-medium  pb-3 pt-10 ${styles.header}`}>
       {orderInfo.name}
     </h3>
