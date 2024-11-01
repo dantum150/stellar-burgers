@@ -1,39 +1,71 @@
 describe('Burger Constructor', () => {
   beforeEach(() => {
     cy.visit('http://localhost:4000/');
-    cy.intercept('GET', 'https://norma.nomoreparties.space/api/ingredients', {
+    cy.intercept('GET', '/api/ingredients', {
       fixture: 'ingredients.json'
     }).as('getIngredients');
 
-    cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders', {
+    cy.intercept('POST', '/api/orders', {
       statusCode: 201,
       fixture: 'order.json'
     }).as('createOrder');
 
-    cy.intercept('GET', 'norma.nomoreparties.space/api/auth/user', {
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 201,
+      fixture: 'user.json'
+    }).as('loginUser');
+
+    cy.intercept('GET', '/api/auth/user', {
       fixture: 'user.json'
     }).as('getUser');
   });
 
   it('проверка на добавление ингредиента', () => {
     cy.wait('@getIngredients');
+  
+    // Получаем ингредиент
     cy.get('[data-testid="ingredient"]').eq(2).as('ingredient');
-    cy.get('@ingredient').find('button').contains('Добавить').click();
-
+    
+    // Получаем текст добавляемого ингредиента
     cy.get('@ingredient')
       .find('p.text_type_main-default')
       .invoke('text')
       .then((text) => {
+        // Проверяем, что ингредиент уже не добавлен
+        cy.get('[data-testid="constructor"] ul .text_type_main-default')
+          .contains(text)
+          .should('not.exist'); // Проверка, что ингредиент отсутствует
+        
+        // Если ингредиент отсутствует, добавляем его
+        cy.get('@ingredient').find('button').contains('Добавить').click();
+  
+        // Проверяем наличие добавленного ингредиента
         cy.get('[data-testid="constructor"] .constructor-element__text')
           .contains(text)
-          .should('exist');
+          .should('exist'); // Проверка, что ингредиент теперь присутствует
       });
   });
+  it('Открытие модалки с проверкой текста ингредиента', () => {
+    // Сохраняем текст ингредиента, чтобы сравнить его с текстом в модалке
+    cy.get('[data-testid="ingredient"]')
+      .first()
+      .find('p.text_type_main-default')
+      .invoke('text')
+      .then((ingredientText) => {
+        cy.get('[data-testid="modal"]').should('not.exist');
+        // Открываем модальное окно, кликнув по ингредиенту
+        cy.get('[data-testid="ingredient"]').first().click();
 
-  it('Откртыие модалки', () => {
-    cy.get('[data-testid="ingredient"]').first().click();
+        // Проверяем, что модальное окно открылось
+        cy.get('[data-testid="modal"]').should('exist');
 
-    cy.get('[data-testid="modal"]').should('exist');
+        // Сравниваем текст ингредиента с текстом в заголовке модального окна
+        cy.get('[data-testid="modal"] h3.text_type_main-medium')
+          .invoke('text')
+          .should((modalText) => {
+            expect(modalText.trim()).to.equal(ingredientText.trim());
+          });
+      });
   });
 
   it('Закрытие модалки', () => {
@@ -47,6 +79,17 @@ describe('Burger Constructor', () => {
   });
 
   it('Создание заказа', () => {
+    cy.visit('http://localhost:4000/login');
+
+    // Ввод email и пароля
+    cy.get('input[name="email"]').type('example@mail.ru');
+    cy.get('input[name="password"]').type('123');
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@loginUser');
+    // Проверка, что перешли на главную страницу
+    cy.url().should('eq', 'http://localhost:4000/');
+
     cy.get('[data-testid="ingredient"]').eq(0).as('bun');
     cy.get('@bun').find('button').contains('Добавить').click();
 
@@ -68,5 +111,11 @@ describe('Burger Constructor', () => {
     cy.get('[data-testid="modal"] button').click();
 
     cy.get('[data-testid="modal"]').should('not.exist');
+
+    cy.get('[data-testid="constructor"] ul .text_type_main-default')
+    .contains('Выберите начинку')
+    .should('exist'); // Проверка, что ингредиент отсутствует
+
+    cy.get('[data-testid="total-price"]').contains('0');
   });
 });
